@@ -43,7 +43,7 @@ deploy_dev_job:
   script:
     - cd search
     - pwd
-    - ssh root@$DEPLOY_SERVER "kill `jps | grep SearchApplication | awk '{print $1}'`"
+    - ssh root@$DEPLOY_SERVER "p=`jps | grep SearchApplication | awk '{print $1}'`; [ -n \"$p\" ] && kill $p"
     - scp -r /target/* root@$DEPLOY_SERVER:$TARGET_DIR
     - ssh root@$DEPLOY_SERVER "cd target;sh start.sh"
     - cd ..
