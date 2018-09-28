@@ -1,21 +1,22 @@
+image: maven:3-jdk-8
 stages:
   - build
   - deploy
 
-compile:
-    stage: build
-    script:
-      - cd search
-      - mvn package -B >> runtime.log
-      - cd ..
-    only:
-      - master
+build:
+  stage: build
+  script:
+    - cd search
+    - mvn package -B >> runtime.log
+    - cd ..
+  only:
+    - master
 
 deploy:
-    stage: deploy
-    script:
-      cd search
-      - ./start.sh
-      cd ..
-    only:
-      - master
+  stage: deploy
+  script:
+    cd search
+    - ./start.sh
+    cd ..
+  only:
+    - master
