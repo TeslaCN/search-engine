@@ -10,8 +10,6 @@ compile:
       - cd ..
     only:
       - master
-    tags:
-      - docker
 
 deploy:
     stage: deploy
@@ -21,5 +19,3 @@ deploy:
       cd ..
     only:
       - master
-    tags:
-      - docker
