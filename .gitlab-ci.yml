@@ -6,8 +6,12 @@ compile:
     stage: build
     script:
       - cd search
-      - mvn package -B
+      - mvn package -B >> runtime.log
       - cd ..
+    only:
+      - master
+    tags:
+      - docker
 
 deploy:
     stage: deploy
