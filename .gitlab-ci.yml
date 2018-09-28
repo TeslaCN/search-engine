@@ -1,0 +1,21 @@
+stages:
+  - build
+  - deploy
+
+compile:
+    stage: build
+    script:
+      - cd search
+      - mvn package -B
+      - cd ..
+
+deploy:
+    stage: deploy
+    script:
+      cd search
+      - ./start.sh
+      cd ..
+    only:
+      - master
+    tags:
+      - docker
