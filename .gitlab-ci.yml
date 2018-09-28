@@ -7,16 +7,20 @@ build:
   stage: build
   script:
     - cd search
-    - mvn package -B >> runtime.log
+    - pwd
+    - mvn package -B
     - cd ..
+    - pwd
   only:
     - master
 
 deploy:
   stage: deploy
   script:
-    cd search
+    - cd search
+    - pwd
     - ./start.sh
-    cd ..
+    - cd ..
+    - pwd
   only:
     - master
