@@ -1,25 +1,14 @@
 image: maven:3-jdk-8
 stages:
-  - build
   - deploy
-
-build:
-  stage: build
-  script:
-    - cd search
-    - pwd
-    - mvn package -B
-    - cd ..
-    - pwd
-  only:
-    - master
 
 deploy:
   stage: deploy
   script:
     - cd search
     - pwd
-    - ./start.sh
+    - mvn package -B
+    - nohup sh run.sh SearchApplication > SearchApplication.log &
     - cd ..
     - pwd
   only:
