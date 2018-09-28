@@ -1,7 +1,7 @@
 image: maven:3-jdk-8
 
 stages:
-  - build
+#  - build
   - deploy_dev
 
 before_script:
@@ -23,16 +23,15 @@ before_script:
   # you will overwrite your user's SSH config.
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-build_job:
-  stage: build
-  only:
-    - master
-  script:
-    - cd search
-    - pwd
-    - mvn package -B
-    - cd ..
-    - pwd
+#build_job:
+#  stage: build
+#  only:
+#    - master
+#  script:
+#    - cd search
+#    - pwd
+#    - cd ..
+#    - pwd
 
 deploy_dev_job:
   stage: deploy_dev
@@ -43,9 +42,10 @@ deploy_dev_job:
   script:
     - cd search
     - pwd
+    - mvn package -B
     - ssh root@$DEPLOY_SERVER "p=`jps | grep SearchApplication | awk '{print $1}'`; if [ -n \"$p\" ] ; then kill $p; fi;"
     - scp -r target/* root@$DEPLOY_SERVER:$TARGET_DIR
-    - ssh root@$DEPLOY_SERVER "cd target;sh start.sh"
+    - ssh root@$DEPLOY_SERVER "cd $TARGET_DIR;sh start.sh"
     - cd ..
     - pwd
 
