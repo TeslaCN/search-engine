@@ -45,7 +45,7 @@ deploy_dev_job:
     - mvn package -Pdev -B
     - ssh root@$DEPLOY_SERVER "p=`jps | grep SearchApplication | awk '{print $1}'`; if [ -n \"$p\" ] ; then kill $p; fi;"
     - scp -r target/* root@$DEPLOY_SERVER:$TARGET_DIR
-    - ssh root@$DEPLOY_SERVER "cd $TARGET_DIR;sh start.sh;cat SearchApplication.log"
+    - ssh root@$DEPLOY_SERVER ". /etc/profile; cd $TARGET_DIR; pwd; sh start.sh; cat SearchApplication.log"
     - cd ..
     - pwd
 
