@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @SpringBootTest
 public class PushConsumerTest {
 
-    @Test
+/*    @Test
     public void pushConsumer() throws Exception {
         // Instantiate with specified consumer group name.
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("please_rename_unique_group_name");
@@ -37,7 +37,7 @@ public class PushConsumerTest {
         consumer.start();
 
         System.out.printf("Consumer Started.%n");
-    }
+    }*/
 
     public static void main(String[] args) throws Exception {
 
@@ -48,7 +48,7 @@ public class PushConsumerTest {
         consumer.setNamesrvAddr("localhost:9876");
 
         // Subscribe one more more topics to consume.
-        consumer.subscribe("url", "*");
+        consumer.subscribe("uri", "*");
         // Register callback to execute on arrival of messages fetched from brokers.
         consumer.registerMessageListener((MessageListenerConcurrently) (msgs, context) -> {
             System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs.stream().map(m -> new String(m.getBody())).collect(Collectors.toList()));
