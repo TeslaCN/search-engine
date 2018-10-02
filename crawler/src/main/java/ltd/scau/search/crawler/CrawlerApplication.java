@@ -1,6 +1,6 @@
 package ltd.scau.search.crawler;
 
-import ltd.scau.search.crawler.mq.MissionConsumer;
+import ltd.scau.search.crawler.component.MissionExecutor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +14,12 @@ public class CrawlerApplication implements CommandLineRunner {
     private static final Log logger = LogFactory.getLog(CrawlerApplication.class);
 
     public static void main(String[] args) {
+        System.setProperty("es.set.netty.runtime.available.processors", "false");
         SpringApplication.run(CrawlerApplication.class, args);
     }
 
     @Autowired
-    private MissionConsumer missionConsumer;
+    private MissionExecutor missionConsumer;
 
     @Override
     public void run(String... args) throws Exception {

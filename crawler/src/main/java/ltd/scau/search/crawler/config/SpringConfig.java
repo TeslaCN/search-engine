@@ -1,7 +1,7 @@
 package ltd.scau.search.crawler.config;
 
-import ltd.scau.search.crawler.component.Crawler;
-import ltd.scau.search.crawler.component.CrawlerImpl;
+import ltd.scau.search.crawler.component.crawler.Crawler;
+import ltd.scau.search.crawler.component.crawler.CrawlerImpl;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;

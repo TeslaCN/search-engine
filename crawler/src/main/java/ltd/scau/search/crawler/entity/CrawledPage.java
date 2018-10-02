@@ -1,5 +1,6 @@
 package ltd.scau.search.crawler.entity;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -9,17 +10,19 @@ import java.util.stream.Collectors;
 /**
  * @author Weijie Wu
  */
-public class Page {
+public class CrawledPage implements Serializable {
 
-    private URI uri;
+    private static final long serialVersionUID = 413703326668658581L;
 
-    private String html;
+    private final URI uri;
 
-    private Set<URI> hrefs = new HashSet<>();
+    private final String html;
 
-    private int code;
+    private final Set<URI> hrefs = new HashSet<>();
 
-    private Page(PageBuilder b) {
+    private final int code;
+
+    private CrawledPage(PageBuilder b) {
         this.uri = b.uri;
         this.html = b.html;
         this.hrefs.addAll(b.hrefs);
@@ -68,8 +71,8 @@ public class Page {
             return this;
         }
 
-        public Page build() {
-            return new Page(this);
+        public CrawledPage build() {
+            return new CrawledPage(this);
         }
     }
 
@@ -77,9 +80,25 @@ public class Page {
     public String toString() {
         return "Page{" +
                 "uri=" + uri +
-                ", html='" + html + '\'' +
+//                ", html='" + html + '\'' +
                 ", hrefs=" + hrefs +
                 ", code=" + code +
                 '}';
+    }
+
+    public URI getUri() {
+        return uri;
+    }
+
+    public String getHtml() {
+        return html;
+    }
+
+    public Set<URI> getHrefs() {
+        return hrefs;
+    }
+
+    public int getCode() {
+        return code;
     }
 }

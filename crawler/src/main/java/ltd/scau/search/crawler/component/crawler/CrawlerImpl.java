@@ -1,6 +1,6 @@
-package ltd.scau.search.crawler.component;
+package ltd.scau.search.crawler.component.crawler;
 
-import ltd.scau.search.crawler.entity.Page;
+import ltd.scau.search.crawler.entity.CrawledPage;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -32,7 +32,7 @@ public class CrawlerImpl implements Crawler {
     private Charset defaultCharset;
 
     @Override
-    public Page crawl(URI uri) throws IOException {
+    public CrawledPage crawl(URI uri) throws IOException {
 
         HttpGet httpGet = new HttpGet(uri);
         HttpResponse response = httpClient.execute(httpGet);
@@ -47,6 +47,6 @@ public class CrawlerImpl implements Crawler {
         Elements a = document.getElementsByTag("a");
         Set<String> hrefs = a.stream().map(element -> element.attr("href")).collect(Collectors.toSet());
 
-        return Page.newPage(uri).code(code).html(html).hrefs(hrefs).build();
+        return CrawledPage.newPage(uri).code(code).html(html).hrefs(hrefs).build();
     }
 }

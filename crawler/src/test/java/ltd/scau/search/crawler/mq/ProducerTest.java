@@ -1,5 +1,7 @@
 package ltd.scau.search.crawler.mq;
 
+import com.alibaba.fastjson.JSONObject;
+import ltd.scau.search.crawler.entity.Mission;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.net.URI;
 import java.util.Date;
 
 /**
@@ -49,8 +52,10 @@ public class ProducerTest {
         //Launch the instance.
 //        defaultMQProducer.start();
 
+        Mission mission = Mission.create(URI.create("http://info.scau.edu.cn"));
         //Create a message instance, specifying topic, tag and message body.
-        Message msg = new Message("uri", "default", "http://info.scau.edu.cn/".getBytes(RemotingHelper.DEFAULT_CHARSET));
+//        Message msg = new Message("uri", "default", "http://info.scau.edu.cn/".getBytes(RemotingHelper.DEFAULT_CHARSET));
+        Message msg = new Message("uri", "default", JSONObject.toJSONString(mission).getBytes(RemotingHelper.DEFAULT_CHARSET));
 
         //Call send message to deliver message to one of brokers.
         SendResult sendResult = defaultMQProducer.send(msg);
