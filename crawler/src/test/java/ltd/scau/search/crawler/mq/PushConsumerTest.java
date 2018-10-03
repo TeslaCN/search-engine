@@ -42,7 +42,7 @@ public class PushConsumerTest {
     public static void main(String[] args) throws Exception {
 
         // Instantiate with specified consumer group name.
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("url_to_crawl");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("crawlerGroup");
 
         // Specify name server addresses.
         consumer.setNamesrvAddr("localhost:9876");

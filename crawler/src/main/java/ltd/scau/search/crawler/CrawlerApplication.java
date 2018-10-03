@@ -24,6 +24,7 @@ public class CrawlerApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         logger.info("hello, world -> INFO");
+        logger.warn("hello, world -> WARN");
         logger.debug("hello, world -> DEBUG");
         logger.error("hello, world -> ERROR");
         missionConsumer.start();

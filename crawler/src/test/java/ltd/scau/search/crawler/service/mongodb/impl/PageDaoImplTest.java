@@ -26,7 +26,7 @@ public class PageDaoImplTest {
         p.setUri("https://scau.ltd/");
         p.setHtml("<body></body>");
         p.setTags(Arrays.asList("scau", "gitlab"));
-        pageDao.insert(p);
+        pageDao.save(p);
     }
 
     @Test

@@ -23,6 +23,8 @@ public class PageEsEntity {
 
     private Long crawlDate;
 
+    private Integer code;
+
     public String getId() {
         return id;
     }
@@ -35,6 +37,7 @@ public class PageEsEntity {
                 ", tags=" + tags +
                 ", content='" + content + '\'' +
                 ", crawlDate=" + crawlDate +
+                ", code=" + code +
                 '}';
     }
 
@@ -69,5 +72,13 @@ public class PageEsEntity {
 
     public void setCrawlDate(Long crawlDate) {
         this.crawlDate = crawlDate;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
     }
 }

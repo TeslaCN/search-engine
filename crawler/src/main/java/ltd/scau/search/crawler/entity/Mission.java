@@ -11,9 +11,13 @@ public class Mission implements Serializable {
 
     private static final long serialVersionUID = -4088060927469120820L;
 
-    private final URI uri;
+    private URI uri;
 
-    private final Date createDate = new Date();
+    private Date createDate = new Date();
+
+    public Mission() {
+
+    }
 
     private Mission(URI uri) {
         this.uri = uri;
@@ -31,8 +35,16 @@ public class Mission implements Serializable {
                 '}';
     }
 
+    public void setUri(URI uri) {
+        this.uri = uri;
+    }
+
     public URI getUri() {
         return uri;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public Date getCreateDate() {

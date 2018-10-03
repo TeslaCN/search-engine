@@ -3,6 +3,7 @@ package ltd.scau.search.crawler.entity;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,15 +19,21 @@ public class CrawledPage implements Serializable {
 
     private final String html;
 
+    private final String content;
+
     private final Set<URI> hrefs = new HashSet<>();
 
     private final int code;
+
+    private final Date time;
 
     private CrawledPage(PageBuilder b) {
         this.uri = b.uri;
         this.html = b.html;
         this.hrefs.addAll(b.hrefs);
         this.code = b.code;
+        this.time = b.time;
+        this.content = b.content;
     }
 
     public static PageBuilder newPage(String uri) {
@@ -40,8 +47,10 @@ public class CrawledPage implements Serializable {
     public static final class PageBuilder {
         private URI uri;
         private String html;
+        private String content;
         private Set<URI> hrefs = new HashSet<>();
         private int code;
+        private Date time;
 
         private PageBuilder(String uri) {
             this(URI.create(uri));
@@ -53,6 +62,11 @@ public class CrawledPage implements Serializable {
 
         public PageBuilder html(String html) {
             this.html = html;
+            return this;
+        }
+
+        public PageBuilder content(String content) {
+            this.content = content;
             return this;
         }
 
@@ -71,6 +85,11 @@ public class CrawledPage implements Serializable {
             return this;
         }
 
+        public PageBuilder when(Date time) {
+            this.time = time;
+            return this;
+        }
+
         public CrawledPage build() {
             return new CrawledPage(this);
         }
@@ -78,12 +97,20 @@ public class CrawledPage implements Serializable {
 
     @Override
     public String toString() {
-        return "Page{" +
+        return "CrawledPage{" +
                 "uri=" + uri +
-//                ", html='" + html + '\'' +
                 ", hrefs=" + hrefs +
                 ", code=" + code +
+                ", time=" + time +
                 '}';
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Date getTime() {
+        return time;
     }
 
     public URI getUri() {

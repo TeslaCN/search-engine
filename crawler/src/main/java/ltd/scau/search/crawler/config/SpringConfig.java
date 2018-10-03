@@ -55,16 +55,6 @@ public class SpringConfig {
     }
 
     @Bean
-    public DefaultMQPushConsumer mqPushConsumer() throws MQClientException {
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerGroup);
-        consumer.setNamesrvAddr(namesrvAddr);
-        consumer.setConsumeThreadMin(threadMin);
-        consumer.setConsumeThreadMax(threadMax);
-        consumer.subscribe(topic, subExpression);
-        return consumer;
-    }
-
-    @Bean
     public HttpClient httpClient() {
         CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(new BasicCookieStore()).setRedirectStrategy(new LaxRedirectStrategy()).build();
         return httpClient;

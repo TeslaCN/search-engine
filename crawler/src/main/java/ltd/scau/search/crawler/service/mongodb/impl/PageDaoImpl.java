@@ -28,7 +28,7 @@ public class PageDaoImpl implements PageDao {
     }
 
     @Override
-    public void insert(PageMongoEntity page) {
+    public void save(PageMongoEntity page) {
         mongoTemplate.save(page);
     }
 

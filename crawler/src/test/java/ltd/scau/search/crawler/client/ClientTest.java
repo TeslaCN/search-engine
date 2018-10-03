@@ -60,4 +60,5 @@ public class ClientTest {
         href.forEach(h -> System.out.println(h + " -> " + uri.resolve(h)));
         System.out.println();
     }
+
 }

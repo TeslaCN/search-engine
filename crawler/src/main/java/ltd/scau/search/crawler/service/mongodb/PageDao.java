@@ -9,7 +9,7 @@ public interface PageDao {
 
     PageMongoEntity findByUri(String uri);
 
-    void insert(PageMongoEntity page);
+    void save(PageMongoEntity page);
 
     void update(PageMongoEntity page);
 

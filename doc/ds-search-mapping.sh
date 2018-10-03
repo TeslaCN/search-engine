@@ -18,7 +18,7 @@ curl -X PUT "${SOCKET}/${INDEX}" -H 'Content-Type: application/json' -d'
         "page" : {
             "properties" : {
                 "uri" :             { "type" : "keyword" },
-
+                "code":             { "type" : "integer" },
                 "content":          {
                                         "type" : "text",
                                         "analyzer": "ik_max_word",

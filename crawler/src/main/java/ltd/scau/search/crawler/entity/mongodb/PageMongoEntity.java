@@ -24,6 +24,8 @@ public class PageMongoEntity implements Serializable {
 
     private Long timestamp;
 
+    private Integer code;
+
     public String getUri() {
         return uri;
     }
@@ -48,12 +50,30 @@ public class PageMongoEntity implements Serializable {
         this.tags = tags;
     }
 
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
     @Override
     public String toString() {
-        return "Page{" +
+        return "PageMongoEntity{" +
                 "uri='" + uri + '\'' +
                 ", html='" + html + '\'' +
                 ", tags=" + tags +
+                ", timestamp=" + timestamp +
+                ", code=" + code +
                 '}';
     }
 }

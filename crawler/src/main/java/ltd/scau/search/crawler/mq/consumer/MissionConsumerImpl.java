@@ -26,15 +26,36 @@ public class MissionConsumerImpl implements MissionConsumer {
 
     private static final Log logger = LogFactory.getLog(MissionConsumerImpl.class);
 
-    @Autowired
     private DefaultMQPushConsumer defaultMQPushConsumer;
 
     @Value("${default.charset}")
     private String defaultCharset;
 
+    @Value("${rocketmq.namesrvAddr}")
+    private String namesrvAddr;
+
+    @Value("${rocketmq.consumerGroup}")
+    private String consumerGroup;
+
+    @Value("${rocketmq.consume.threadMin}")
+    private Integer threadMin;
+
+    @Value("${rocketmq.consume.threadMax}")
+    private Integer threadMax;
+
+    @Value("${rocketmq.topic}")
+    private String topic;
+
+    @Value("${rocketmq.subexpression}")
+    private String subExpression;
+
     @Override
     public void onMission(Function<Mission, ExecuteResult<CrawledPage>> messageHandler) throws MQClientException {
-
+        defaultMQPushConsumer = new DefaultMQPushConsumer(consumerGroup);
+        defaultMQPushConsumer.setNamesrvAddr(namesrvAddr);
+        defaultMQPushConsumer.subscribe(topic, subExpression);
+        defaultMQPushConsumer.setConsumeThreadMin(threadMin);
+        defaultMQPushConsumer.setConsumeThreadMax(threadMax);
         defaultMQPushConsumer.registerMessageListener((MessageListenerConcurrently) (msgs, context) -> {
             AtomicBoolean error = new AtomicBoolean(false);
             msgs.forEach(m -> {

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,8 +46,8 @@ public class CrawlerImpl implements Crawler {
 
         Document document = Jsoup.parse(html, uri.toString());
         Elements a = document.getElementsByTag("a");
-        Set<String> hrefs = a.stream().map(element -> element.attr("href")).collect(Collectors.toSet());
+        Set<String> hrefs = a.stream().map(element -> element.attr("href")).filter(s -> s.charAt(0) != '#').collect(Collectors.toSet());
 
-        return CrawledPage.newPage(uri).code(code).html(html).hrefs(hrefs).build();
+        return CrawledPage.newPage(uri).code(code).html(html).content(document.text()).hrefs(hrefs).when(new Date()).build();
     }
 }

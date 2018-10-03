@@ -18,22 +18,19 @@ import java.util.Date;
 /**
  * @author Weijie Wu
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class ProducerTest {
-
-    @Autowired
-    private DefaultMQProducer defaultMQProducer;
 
     @Test
     public void test() throws Exception {
         // Specify name server addresses.
+        DefaultMQProducer defaultMQProducer = new DefaultMQProducer("searcher");
+        defaultMQProducer.setNamesrvAddr("localhost:9876");
         //Launch the instance.
         defaultMQProducer.start();
         for (int i = 0; i < 10; i++) {
             //Create a message instance, specifying topic, tag and message body.
-            Message msg = new Message("uri" /* Topic */,
-                    "TagA" /* Tag */,
+            Message msg = new Message("url" /* Topic */,
+                    "default" /* Tag */,
                     ("http://scau.ltd/" +
                             i + "/" + new Date()).getBytes(RemotingHelper.DEFAULT_CHARSET) /* Message body */
             );
@@ -49,10 +46,13 @@ public class ProducerTest {
     @Test
     public void testSingle() throws Exception {
         // Specify name server addresses.
+        DefaultMQProducer defaultMQProducer = new DefaultMQProducer("searcherGroup");
         //Launch the instance.
-//        defaultMQProducer.start();
+        defaultMQProducer.setNamesrvAddr("localhost:9876");
+        defaultMQProducer.start();
 
-        Mission mission = Mission.create(URI.create("http://info.scau.edu.cn"));
+//        Mission mission = Mission.create(URI.create("http://info.scau.edu.cn"));
+        Mission mission = Mission.create(URI.create("http://www.scau.edu.cn"));
         //Create a message instance, specifying topic, tag and message body.
 //        Message msg = new Message("uri", "default", "http://info.scau.edu.cn/".getBytes(RemotingHelper.DEFAULT_CHARSET));
         Message msg = new Message("uri", "default", JSONObject.toJSONString(mission).getBytes(RemotingHelper.DEFAULT_CHARSET));
