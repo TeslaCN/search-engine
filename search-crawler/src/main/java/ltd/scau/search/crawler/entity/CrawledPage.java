@@ -17,6 +17,8 @@ public class CrawledPage implements Serializable {
 
     private final URI uri;
 
+    private final String title;
+
     private final String html;
 
     private final String content;
@@ -29,6 +31,7 @@ public class CrawledPage implements Serializable {
 
     private CrawledPage(PageBuilder b) {
         this.uri = b.uri;
+        this.title = b.title;
         this.html = b.html;
         this.hrefs.addAll(b.hrefs);
         this.code = b.code;
@@ -46,6 +49,7 @@ public class CrawledPage implements Serializable {
 
     public static final class PageBuilder {
         private URI uri;
+        private String title;
         private String html;
         private String content;
         private Set<URI> hrefs = new HashSet<>();
@@ -58,6 +62,11 @@ public class CrawledPage implements Serializable {
 
         private PageBuilder(URI uri) {
             this.uri = uri;
+        }
+
+        public PageBuilder title(String title) {
+            this.title = title;
+            return this;
         }
 
         public PageBuilder html(String html) {
@@ -99,6 +108,7 @@ public class CrawledPage implements Serializable {
     public String toString() {
         return "CrawledPage{" +
                 "uri=" + uri +
+                ", title='" + title + '\'' +
                 ", hrefs=" + hrefs +
                 ", code=" + code +
                 ", time=" + time +
@@ -111,6 +121,10 @@ public class CrawledPage implements Serializable {
 
     public Date getTime() {
         return time;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public URI getUri() {

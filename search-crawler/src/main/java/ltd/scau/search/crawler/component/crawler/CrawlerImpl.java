@@ -48,6 +48,11 @@ public class CrawlerImpl implements Crawler {
         Elements a = document.getElementsByTag("a");
         Set<String> hrefs = a.stream().map(element -> element.attr("href")).filter(s -> s.charAt(0) != '#').collect(Collectors.toSet());
 
-        return CrawledPage.newPage(uri).code(code).html(html).content(document.text()).hrefs(hrefs).when(new Date()).build();
+        String title = document.getElementsByTag("h1").text();
+        if (title == null || title.trim().isEmpty()) {
+            title = document.getElementsByTag("h2").text();
+        }
+
+        return CrawledPage.newPage(uri).code(code).title(title).html(html).content(document.text()).hrefs(hrefs).when(new Date()).build();
     }
 }

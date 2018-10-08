@@ -10,10 +10,13 @@ import ltd.scau.search.crawler.entity.ExecuteResult;
 import ltd.scau.search.commons.entity.Mission;
 import ltd.scau.search.crawler.mq.consumer.MissionConsumer;
 import ltd.scau.search.crawler.mq.producer.MissionProducer;
+import ltd.scau.search.crawler.service.redis.RedisDao;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -43,11 +46,17 @@ public class MissionExecutor {
     @Autowired
     private PageMongoRepository pageMongoRepository;
 
+    @Autowired
+    private RedisDao redisDao;
+
+    @Value("${crawled.redis.set.name}")
+    private String crawledRedisSetName;
+
     public void start() throws MQClientException {
         missionConsumer.onMission(mission -> {
-            Page<PageMongoEntity> mongoEntities = pageMongoRepository.findByUri(mission.getUri().toString(), Pageable.unpaged());
+            String uriMd5 = DigestUtils.md5Hex(mission.getUri().toString());
 
-            if (mongoEntities.getTotalElements() > 0) {
+            if (redisDao.setContains(crawledRedisSetName, uriMd5)) {
                 return ExecuteResult.aResult().succeed(true).build();
             }
             CrawledPage page = null;
@@ -64,6 +73,7 @@ public class MissionExecutor {
             mongoEntity.setUri(mission.getUri().toString());
             mongoEntity.setCode(page.getCode());
             mongoEntity.setTimestamp(page.getTime().getTime());
+            mongoEntity.setTitle(page.getTitle());
             mongoEntity.setHtml(page.getHtml());
             pageMongoRepository.save(mongoEntity);
 
@@ -71,13 +81,17 @@ public class MissionExecutor {
             esEntity.setUri(mission.getUri().toString());
             esEntity.setCode(page.getCode());
             esEntity.setCrawlDate(page.getTime().getTime());
+            esEntity.setTitle(page.getTitle());
             esEntity.setContent(page.getContent());
             pageESRepository.index(esEntity);
 
+            redisDao.setAdd(crawledRedisSetName, uriMd5);
             try {
                 Mission[] missions = page.getHrefs().stream()
-                        .filter(uri -> uri.getHost() != null && uri.getHost().equals(mission.getUri().getHost()))
-                        .map(Mission::create).toArray(Mission[]::new);
+                        .filter(uri -> uri.getHost() != null
+                                && uri.getHost().equals(mission.getUri().getHost())
+                                && !redisDao.setContains(crawledRedisSetName, DigestUtils.md5Hex(uri.toString()))
+                        ).map(Mission::create).toArray(Mission[]::new);
                 missionProducer.submit(missions);
             } catch (Exception e) {
                 e.printStackTrace();

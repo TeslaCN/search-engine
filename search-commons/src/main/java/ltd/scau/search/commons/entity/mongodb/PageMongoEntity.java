@@ -17,6 +17,9 @@ public class PageMongoEntity implements Serializable {
     @Indexed(unique = true)
     private String uri;
 
+    @Indexed
+    private String title;
+
     private String html;
 
     @Indexed
@@ -25,6 +28,14 @@ public class PageMongoEntity implements Serializable {
     private Long timestamp;
 
     private Integer code;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getUri() {
         return uri;
@@ -70,7 +81,7 @@ public class PageMongoEntity implements Serializable {
     public String toString() {
         return "PageMongoEntity{" +
                 "uri='" + uri + '\'' +
-                ", html='" + html + '\'' +
+                ", title='" + title + '\'' +
                 ", tags=" + tags +
                 ", timestamp=" + timestamp +
                 ", code=" + code +
