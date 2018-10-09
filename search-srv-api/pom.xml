@@ -160,7 +160,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>ltd.scau.search.search.SearchApplication</mainClass>
+                            <mainClass>ltd.scau.search.SearchApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
