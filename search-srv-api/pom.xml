@@ -36,6 +36,15 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
+
+        <profile>
+            <id>test</id>
+            <properties>
+                <conf.dir>src/main/resources/test/</conf.dir>
+                <package.type>jar</package.type>
+            </properties>
+        </profile>
+
     </profiles>
 
     <dependencies>
