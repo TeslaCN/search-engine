@@ -6,10 +6,18 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MatchPhrasePrefixQueryBuilder;
+import org.elasticsearch.index.query.PrefixQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
+import org.elasticsearch.search.suggest.SuggestBuilder;
+import org.elasticsearch.search.suggest.SuggestBuilders;
+import org.elasticsearch.search.suggest.SuggestionBuilder;
+import org.elasticsearch.search.suggest.phrase.PhraseSuggestionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
@@ -82,5 +90,15 @@ public class SearchESDaoImpl implements SearchESDao {
         return highlightQuery(QueryBuilders.boolQuery()
                 .should(QueryBuilders.matchQuery("title", key))
                 .should(QueryBuilders.matchQuery("content", key)));
+    }
+
+    @Override
+    public List<String> suggestions(String key) {
+        PrefixQueryBuilder query = QueryBuilders.prefixQuery("title", key);
+        Client client = elasticsearchTemplate.getClient();
+
+        SearchResponse response = client.prepareSearch("ds-search").setQuery(query).execute().actionGet();
+        SearchHit[] hits = response.getHits().getHits();
+        return Arrays.stream(hits).map(hit -> hit.getSourceAsMap().get("title").toString()).collect(Collectors.toList());
     }
 }

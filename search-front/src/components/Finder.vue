@@ -1,59 +1,60 @@
 <template>
-  <el-col :span="24">
-    <el-autocomplete
-      v-model="state4"
-      :fetch-suggestions="querySearchAsync"
-      placeholder="请输入内容"
-      @select="handleSelect"
-      value-key="title"
-    ></el-autocomplete>
-  </el-col>
+  <el-row>
+    <el-col :span="24">
+      <el-autocomplete
+        v-model="input"
+        :fetch-suggestions="querySearchAsync"
+        placeholder="请输入内容"
+        @select="handleSelect"
+      ></el-autocomplete>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
   export default {
     data() {
       return {
-        searchResults: [],
-        state4: '',
+        suggestions: [],
+        input: '',
         timeout: null
-      };
+      }
     },
     methods: {
       load(key) {
-        this.$ajax('/search?key=' + key).then((response) => {
-          this.searchResults = response.data
+        let data = [];
+        this.$ajax('/prefix?key=' + key).then((response) => {
+          this.suggestions = response.data
         })
       },
       querySearchAsync(queryString, cb) {
-        if (!queryString) {
-          return
-        }
-        this.load(queryString)
-        let searchResults = this.searchResults;
-        // let results = queryString ? searchResults.filter(this.createStateFilter(queryString)) : searchResults;
+        let suggestions = this.suggestions;
+        // let results = queryString ? searchResults.filter(this.createStateFilter(queryString)) : searchResults
 
-        clearTimeout(this.timeout);
+        clearTimeout(this.timeout)
         this.timeout = setTimeout(() => {
-          cb(searchResults);
-        }, 1000);
+          cb(suggestions)
+        }, 1000)
       },
       createStateFilter(queryString) {
         return (state) => {
-          return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-        };
+          return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+        }
       },
       handleSelect(item) {
-        console.log(item.uri);
-        console.log(item.title)
-        console.log(item.highlights)
+        this.$emit('search', {
+          item: item
+        })
       }
     },
     mounted() {
-      console.log('mounted()')
+      this.load('')
     }
-  };
+  }
 </script>
 
 <style scoped>
+  .el-input {
+    min-width: 50%;
+  }
 </style>

@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Weijie Wu
@@ -42,5 +45,17 @@ public class SearchController {
     @GetMapping("/like")
     public List<SearchResultEntity> like(@RequestParam(required = false) String key) {
         return pageESDao.findLikeKeyHighlight(key);
+    }
+
+    @GetMapping("/prefix")
+    public List<Map<String, String>> prefix(@RequestParam String key) {
+        List<String> suggestions = pageESDao.suggestions(key);
+        List<Map<String, String>> results = new LinkedList<>();
+        suggestions.forEach(s -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("value", s);
+            results.add(map);
+        });
+        return results;
     }
 }

@@ -13,4 +13,5 @@ public interface SearchESDao {
 
     List<SearchResultEntity> findLikeKeyHighlight(String key);
 
+    List<String> suggestions(String key);
 }
