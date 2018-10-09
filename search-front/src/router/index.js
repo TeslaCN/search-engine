@@ -14,7 +14,7 @@ export default new Router({
     {
       path: '/',
       name: 'Search',
-      component: () => import('@/components/Finder')
+      component: () => import('@/views/Search')
     }
   ]
 })

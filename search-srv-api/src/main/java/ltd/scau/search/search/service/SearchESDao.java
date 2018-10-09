@@ -1,6 +1,5 @@
 package ltd.scau.search.search.service;
 
-import ltd.scau.search.commons.entity.es.PageEsEntity;
 import ltd.scau.search.search.entity.SearchResultEntity;
 
 import java.util.List;
@@ -11,5 +10,7 @@ import java.util.List;
 public interface SearchESDao {
 
     List<SearchResultEntity> findByKeyHighlight(String key);
+
+    List<SearchResultEntity> findLikeKeyHighlight(String key);
 
 }

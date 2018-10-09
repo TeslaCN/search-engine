@@ -1,6 +1,7 @@
 package ltd.scau.search.crawler.mq.producer;
 
 import ltd.scau.search.commons.entity.Mission;
+import ltd.scau.search.commons.mq.producer.MissionProducer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

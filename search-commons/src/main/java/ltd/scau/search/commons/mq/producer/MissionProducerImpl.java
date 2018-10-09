@@ -1,4 +1,4 @@
-package ltd.scau.search.crawler.mq.producer;
+package ltd.scau.search.commons.mq.producer;
 
 import com.alibaba.fastjson.JSON;
 import ltd.scau.search.commons.entity.Mission;

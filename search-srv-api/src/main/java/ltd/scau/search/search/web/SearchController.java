@@ -29,8 +29,6 @@ public class SearchController {
         size = size == null || size < 0 ? 10 : size;
         Page<PageEsEntity> entities = pageESRepository.findByContentLike(key, PageRequest.of(page, size));
         return entities;
-//        List<PageEsEntity> content = entities.getContent();
-//        return ResponseEntity.ok(content);
     }
 
     @Autowired
@@ -39,5 +37,10 @@ public class SearchController {
     @GetMapping("/search")
     public List<SearchResultEntity> highlight(@RequestParam(required = false) String key) {
         return pageESDao.findByKeyHighlight(key);
+    }
+
+    @GetMapping("/like")
+    public List<SearchResultEntity> like(@RequestParam(required = false) String key) {
+        return pageESDao.findLikeKeyHighlight(key);
     }
 }

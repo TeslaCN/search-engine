@@ -38,7 +38,7 @@ done
 params=$@
 
 if [ "$COMMAND" = "SearchApplication" ]; then
-    CLASS=ltd.scau.search.search.SearchApplication
+    CLASS=ltd.scau.search.SearchApplication
 else
     CLASS=${COMMAND}
 fi

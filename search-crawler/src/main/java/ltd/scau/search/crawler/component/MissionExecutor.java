@@ -9,7 +9,7 @@ import ltd.scau.search.crawler.entity.CrawledPage;
 import ltd.scau.search.crawler.entity.ExecuteResult;
 import ltd.scau.search.commons.entity.Mission;
 import ltd.scau.search.crawler.mq.consumer.MissionConsumer;
-import ltd.scau.search.crawler.mq.producer.MissionProducer;
+import ltd.scau.search.commons.mq.producer.MissionProducer;
 import ltd.scau.search.crawler.service.redis.RedisDao;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
@@ -17,8 +17,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

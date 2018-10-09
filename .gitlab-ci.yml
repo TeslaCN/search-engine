@@ -23,14 +23,12 @@ before_script:
   # you will overwrite your user's SSH config.
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
 #build_job:
 #  stage: build
 #  only:
 #    - master
 #  script:
-#    - cd search
-#    - pwd
-#    - cd ..
 #    - pwd
 
 deploy_dev_job:
@@ -40,13 +38,5 @@ deploy_dev_job:
   only:
     - master
   script:
-#    - cd search
-    - pwd
-#    - mvn package -Pdev -B
-#    - ssh root
-#    - ssh root@$DEPLOY_SERVER "p=`jps | grep SearchApplication | awk '{print $1}'`; if [ -n \"$p\" ] ; then kill $p; fi;"
-#    - scp -r target/* root@$DEPLOY_SERVER:$TARGET_DIR
-#    - ssh root@$DEPLOY_SERVER ". /etc/profile; cd $TARGET_DIR; pwd; sh start.sh; cat SearchApplication.log"
-#    - cd ..
-#    - pwd
+    - ssh $DEPLOY_SERVER_USER@$DEPLOY_SERVER_HOST -p $DEPLOY_SERVER_PORT ". /etc/profile; cd $DEPLOY_ROOT; sh $AUTO_DEPLOY_SCRIPT $DEPLOY_SCRIPT_PARAMS"
 
