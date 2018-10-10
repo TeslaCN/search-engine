@@ -8,7 +8,8 @@
     <div v-for="result in results">
       <div>
         <a :href="result.uri" target="_blank">
-          <span v-html="result.title"></span>
+          <span v-if="result.title != ''" v-html="result.title"></span>
+          <span v-else>{{result.uri}}</span>
         </a>
       </div>
       <div v-for="line in result.highlights"><span v-html="line"></span></div>
@@ -40,9 +41,9 @@
   }
 </script>
 
-<style scoped>
+<style>
   em {
-    color: yellow;
+    color: red;
     font-weight: bold;
   }
 </style>

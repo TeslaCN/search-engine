@@ -6,6 +6,8 @@
         :fetch-suggestions="querySearchAsync"
         placeholder="请输入内容"
         @select="handleSelect"
+        :select-when-unmatched="true"
+        clearable
       ></el-autocomplete>
     </el-col>
   </el-row>
@@ -21,25 +23,11 @@
       }
     },
     methods: {
-      load(key) {
-        let data = [];
-        this.$ajax('/prefix?key=' + key).then((response) => {
-          this.suggestions = response.data
-        })
-      },
       querySearchAsync(queryString, cb) {
-        let suggestions = this.suggestions;
-        // let results = queryString ? searchResults.filter(this.createStateFilter(queryString)) : searchResults
-
-        clearTimeout(this.timeout)
-        this.timeout = setTimeout(() => {
-          cb(suggestions)
-        }, 1000)
-      },
-      createStateFilter(queryString) {
-        return (state) => {
-          return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
-        }
+        this.$ajax('/prefix?key=' + queryString).then((response) => {
+          this.suggestions = response.data
+          cb(this.suggestions)
+        })
       },
       handleSelect(item) {
         this.$emit('search', {
@@ -48,13 +36,12 @@
       }
     },
     mounted() {
-      this.load('')
     }
   }
 </script>
 
 <style scoped>
-  .el-input {
-    min-width: 50%;
+  em {
+
   }
 </style>
