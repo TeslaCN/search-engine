@@ -38,13 +38,13 @@ public class SearchESDaoImpl implements SearchESDao {
     private ElasticsearchTemplate elasticsearchTemplate;
 
     @Override
-    public List<SearchResultEntity> findByKeyHighlight(String key) {
+    public List<SearchResultEntity> findByKeyHighlight(String key, Integer page, Integer size) {
         return highlightQuery(QueryBuilders.boolQuery()
                 .should(QueryBuilders.matchPhraseQuery("title", key))
-                .should(QueryBuilders.matchPhraseQuery("content", key)));
+                .should(QueryBuilders.matchPhraseQuery("content", key)), page, size);
     }
 
-    private List<SearchResultEntity> highlightQuery(BoolQueryBuilder queryBuilder) {
+    private List<SearchResultEntity> highlightQuery(BoolQueryBuilder queryBuilder, Integer page, Integer size) {
         Client client = elasticsearchTemplate.getClient();
 
         HighlightBuilder highlightBuilder = new HighlightBuilder();
@@ -52,10 +52,12 @@ public class SearchESDaoImpl implements SearchESDao {
 
         SearchResponse searchResponse = client
                 .prepareSearch("ds-search")
-                .setQuery(queryBuilder
-                )
+                .setQuery(queryBuilder)
                 .highlighter(highlightBuilder)
+                .setFrom(page * size)
+                .setSize(size)
                 .execute().actionGet();
+
         SearchHits hits = searchResponse.getHits();
 
         List<SearchResultEntity> entities = new ArrayList<>();
@@ -86,10 +88,10 @@ public class SearchESDaoImpl implements SearchESDao {
     }
 
     @Override
-    public List<SearchResultEntity> findLikeKeyHighlight(String key) {
+    public List<SearchResultEntity> findLikeKeyHighlight(String key, Integer page, Integer size) {
         return highlightQuery(QueryBuilders.boolQuery()
                 .should(QueryBuilders.matchQuery("title", key))
-                .should(QueryBuilders.matchQuery("content", key)));
+                .should(QueryBuilders.matchQuery("content", key)), page, size);
     }
 
     @Override
