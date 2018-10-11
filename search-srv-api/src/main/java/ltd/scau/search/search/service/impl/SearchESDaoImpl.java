@@ -1,23 +1,18 @@
 package ltd.scau.search.search.service.impl;
 
-import ltd.scau.search.search.entity.SearchResultEntity;
+import ltd.scau.search.search.entity.Hits;
+import ltd.scau.search.search.entity.HighlightResultEntity;
 import ltd.scau.search.search.service.SearchESDao;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MatchPhrasePrefixQueryBuilder;
 import org.elasticsearch.index.query.PrefixQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
-import org.elasticsearch.search.suggest.SuggestBuilder;
-import org.elasticsearch.search.suggest.SuggestBuilders;
-import org.elasticsearch.search.suggest.SuggestionBuilder;
-import org.elasticsearch.search.suggest.phrase.PhraseSuggestionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
@@ -38,13 +33,13 @@ public class SearchESDaoImpl implements SearchESDao {
     private ElasticsearchTemplate elasticsearchTemplate;
 
     @Override
-    public List<SearchResultEntity> findByKeyHighlight(String key, Integer page, Integer size) {
+    public Hits findByKeyHighlight(String key, Integer page, Integer size) {
         return highlightQuery(QueryBuilders.boolQuery()
                 .should(QueryBuilders.matchPhraseQuery("title", key))
                 .should(QueryBuilders.matchPhraseQuery("content", key)), page, size);
     }
 
-    private List<SearchResultEntity> highlightQuery(BoolQueryBuilder queryBuilder, Integer page, Integer size) {
+    private Hits highlightQuery(BoolQueryBuilder queryBuilder, Integer page, Integer size) {
         Client client = elasticsearchTemplate.getClient();
 
         HighlightBuilder highlightBuilder = new HighlightBuilder();
@@ -60,7 +55,9 @@ public class SearchESDaoImpl implements SearchESDao {
 
         SearchHits hits = searchResponse.getHits();
 
-        List<SearchResultEntity> entities = new ArrayList<>();
+        long totalHits = hits.totalHits;
+
+        List<HighlightResultEntity> entities = new ArrayList<>();
         hits.forEach(hit -> {
             Map<String, Object> sourceMap = hit.getSourceAsMap();
 
@@ -69,7 +66,7 @@ public class SearchESDaoImpl implements SearchESDao {
             HighlightField contentHighlight = highlightFields.get("content");
             Text[] contentTexts = contentHighlight.getFragments();
 
-            SearchResultEntity entity = new SearchResultEntity();
+            HighlightResultEntity entity = new HighlightResultEntity();
 
             HighlightField titleHighlight = highlightFields.get("title");
             if (titleHighlight != null) {
@@ -84,11 +81,11 @@ public class SearchESDaoImpl implements SearchESDao {
             entities.add(entity);
         });
 
-        return entities;
+        return Hits.aHits().entities(entities).totalHits(totalHits).build();
     }
 
     @Override
-    public List<SearchResultEntity> findLikeKeyHighlight(String key, Integer page, Integer size) {
+    public Hits findLikeKeyHighlight(String key, Integer page, Integer size) {
         return highlightQuery(QueryBuilders.boolQuery()
                 .should(QueryBuilders.matchQuery("title", key))
                 .should(QueryBuilders.matchQuery("content", key)), page, size);

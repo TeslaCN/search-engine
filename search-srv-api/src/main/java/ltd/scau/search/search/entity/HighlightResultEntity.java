@@ -1,11 +1,12 @@
 package ltd.scau.search.search.entity;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author Weijie Wu
  */
-public class SearchResultEntity {
+public class HighlightResultEntity {
 
     private String uri;
 
@@ -13,13 +14,35 @@ public class SearchResultEntity {
 
     private List<String> highlights;
 
+    private Date crawlDate;
+
+    private List<String> tags;
+
     @Override
     public String toString() {
         return "SearchResultEntity{" +
                 "uri='" + uri + '\'' +
                 ", title='" + title + '\'' +
                 ", highlights=" + highlights +
+                ", crawlDate=" + crawlDate +
+                ", tags=" + tags +
                 '}';
+    }
+
+    public Date getCrawlDate() {
+        return crawlDate;
+    }
+
+    public void setCrawlDate(Date crawlDate) {
+        this.crawlDate = crawlDate;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     public String getUri() {

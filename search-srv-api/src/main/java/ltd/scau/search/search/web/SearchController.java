@@ -1,7 +1,8 @@
 package ltd.scau.search.search.web;
 
+import ltd.scau.search.commons.entity.ResponseData;
 import ltd.scau.search.commons.entity.es.PageEsEntity;
-import ltd.scau.search.search.entity.SearchResultEntity;
+import ltd.scau.search.search.entity.SearchHistory;
 import ltd.scau.search.search.service.SearchESDao;
 import ltd.scau.search.commons.service.es.PageESRepository;
 import ltd.scau.search.search.service.SearchHistoryRepository;
@@ -37,22 +38,29 @@ public class SearchController {
         key = key == null ? "" : key;
         page = page == null || page < 0 ? 0 : page;
         size = size == null || size < 0 ? 10 : size;
-        Page<PageEsEntity> entities = pageESRepository.findByContentLike(key, PageRequest.of(page, size));
-        return entities;
+        return pageESRepository.findByContentLike(key, PageRequest.of(page, size));
     }
 
     @GetMapping("/search")
-    public List<SearchResultEntity> highlight(@RequestParam String key, Integer page, Integer size) {
+    public ResponseData highlight(@RequestParam String key, Integer page, Integer size) {
         page = page == null || page < 0 ? 0 : page;
         size = size == null || size < 0 ? 10 : size;
-        return pageESDao.findByKeyHighlight(key, page, size);
+        SearchHistory history = new SearchHistory();
+        history.setSearchKey(key);
+        history.setUserId(0L);
+        searchHistoryRepository.saveAndFlush(history);
+        return ResponseData.aData().data(pageESDao.findByKeyHighlight(key, page, size)).build();
     }
 
     @GetMapping("/like")
-    public List<SearchResultEntity> like(@RequestParam String key, Integer page, Integer size) {
+    public ResponseData like(@RequestParam String key, Integer page, Integer size) {
         page = page == null || page < 0 ? 0 : page;
         size = size == null || size < 0 ? 10 : size;
-        return pageESDao.findLikeKeyHighlight(key, page, size);
+        SearchHistory history = new SearchHistory();
+        history.setSearchKey(key);
+        history.setUserId(0L);
+        searchHistoryRepository.saveAndFlush(history);
+        return ResponseData.aData().data(pageESDao.findLikeKeyHighlight(key, page, size)).build();
     }
 
     @GetMapping("/prefix")

@@ -27,6 +27,14 @@ public class Mission implements Serializable {
         return new Mission(uri);
     }
 
+    public static Mission[] create(URI... uri) {
+        Mission[] missions = new Mission[uri.length];
+        for (int i = 0; i < missions.length; i++) {
+            missions[i] = create(uri[i]);
+        }
+        return missions;
+    }
+
     @Override
     public String toString() {
         return "Mission{" +

@@ -15,7 +15,10 @@ public class SearchHistory implements Serializable {
     private Long id;
 
     private String searchKey;
+
+    @Column(insertable = false)
     private Timestamp time;
+
     private Long userId;
 
     @Override

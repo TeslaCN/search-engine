@@ -1,4 +1,4 @@
-package ltd.scau.search.search;
+package ltd.scau.search;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
