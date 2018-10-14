@@ -22,6 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <rocketmq.version>4.3.1</rocketmq.version>
     </properties>
 
     <profiles>
@@ -90,7 +91,12 @@
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
-            <version>4.3.1</version>
+            <version>${rocketmq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-tools</artifactId>
+            <version>${rocketmq.version}</version>
         </dependency>
 
         <dependency>
@@ -106,6 +112,11 @@
             <!--<version>6.4.0</version>-->
         <!--</dependency>-->
 
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>joor</artifactId>
+            <version>0.9.9</version>
+        </dependency>
 
         <dependency>
             <groupId>javax.validation</groupId>

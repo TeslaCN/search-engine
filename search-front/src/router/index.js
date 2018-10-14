@@ -15,6 +15,11 @@ export default new Router({
       path: '/',
       name: 'Search',
       component: () => import('@/views/Search')
+    },
+    {
+      path: '/manage',
+      name: 'Manage',
+      component: () => import('@/views/mq/Manage')
     }
   ]
 })

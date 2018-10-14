@@ -3,6 +3,7 @@ package ltd.scau.search.crawler.mq;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import org.apache.rocketmq.common.message.MessageExt;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -51,7 +52,8 @@ public class PushConsumerTest {
         consumer.subscribe("uri", "*");
         // Register callback to execute on arrival of messages fetched from brokers.
         consumer.registerMessageListener((MessageListenerConcurrently) (msgs, context) -> {
-            System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs.stream().map(m -> new String(m.getBody())).collect(Collectors.toList()));
+            System.out.println(context);
+            System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs.stream().map(MessageExt::getMsgId).collect(Collectors.toList()));
             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         });
 
