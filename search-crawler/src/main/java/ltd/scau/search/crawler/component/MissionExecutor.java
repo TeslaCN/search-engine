@@ -15,6 +15,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.rocketmq.client.exception.MQClientException;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -60,7 +61,10 @@ public class MissionExecutor {
             CrawledPage page = null;
             try {
                 page = crawler.execute(mission);
-            } catch (IOException e) {
+                if (page == null) {
+                    return ExecuteResult.aResult().succeed(true).build();
+                }
+            } catch (IOException | DocumentException e) {
                 e.printStackTrace();
                 return ExecuteResult.aResult().succeed(false).message(e.getMessage()).build();
             }

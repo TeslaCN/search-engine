@@ -19,9 +19,9 @@ public class PageEsEntity {
 
     private List<String> tags;
 
-    private String title;
+    private List<String> title;
 
-    private String content;
+    private List<String> content;
 
     private Long crawlDate;
 
@@ -43,6 +43,10 @@ public class PageEsEntity {
                 '}';
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getUri() {
         return uri;
     }
@@ -60,19 +64,19 @@ public class PageEsEntity {
         this.tags = tags;
     }
 
-    public String getTitle() {
+    public List<String> getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(List<String> title) {
         this.title = title;
     }
 
-    public String getContent() {
+    public List<String> getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(List<String> content) {
         this.content = content;
     }
 

@@ -2,10 +2,10 @@ package ltd.scau.search.search.web;
 
 import ltd.scau.search.commons.entity.ResponseData;
 import ltd.scau.search.commons.entity.es.PageEsEntity;
-import ltd.scau.search.search.entity.SearchHistory;
+import ltd.scau.search.commons.entity.SearchHistory;
 import ltd.scau.search.search.service.SearchESDao;
 import ltd.scau.search.commons.service.es.PageESRepository;
-import ltd.scau.search.search.service.SearchHistoryRepository;
+import ltd.scau.search.commons.service.SearchHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

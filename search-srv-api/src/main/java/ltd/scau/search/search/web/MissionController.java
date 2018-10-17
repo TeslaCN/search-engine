@@ -5,6 +5,8 @@ import ltd.scau.search.commons.entity.ResponseData;
 import ltd.scau.search.commons.entity.mq.Message;
 import ltd.scau.search.commons.mq.producer.MissionProducer;
 import ltd.scau.search.commons.service.mq.MessageService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.rocketmq.common.protocol.body.ConsumeMessageDirectlyResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +21,8 @@ import java.util.List;
  */
 @RestController
 public class MissionController {
+
+    private static final Log logger = LogFactory.getLog(MissionController.class);
 
     @Autowired
     private MissionProducer missionProducer;
@@ -36,6 +40,7 @@ public class MissionController {
     public ResponseData postMission(String uris) {
         try {
             missionProducer.submit(Mission.create(Arrays.stream(uris.split("\\|")).map(URI::create).toArray(URI[]::new)));
+            logger.info(uris);
             return ResponseData.aData().build();
         } catch (Exception e) {
             e.printStackTrace();

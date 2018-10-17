@@ -1,8 +1,9 @@
-package ltd.scau.search.search.entity;
+package ltd.scau.search.commons.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 /**
  * @author Weijie Wu
@@ -29,6 +30,20 @@ public class SearchHistory implements Serializable {
                 ", time=" + time +
                 ", userId=" + userId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SearchHistory that = (SearchHistory) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
 
     public Long getId() {

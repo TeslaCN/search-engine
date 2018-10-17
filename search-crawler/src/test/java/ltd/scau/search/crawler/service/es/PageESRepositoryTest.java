@@ -28,7 +28,7 @@ public class PageESRepositoryTest {
 
         entity.setUri("http://info.scau.edu.cn");
         entity.setTags(Arrays.asList("gitlab", "scau"));
-        entity.setContent("9月18日晚，特邀嘉宾臧根林博士在丁颖礼堂为数学与信息学院、软件学院795名本科新生及59名研究生新生上大学职业规划第一课——生涯规划从入学开始。");
+        entity.setContent(Arrays.asList(""));
         entity.setCrawlDate(System.currentTimeMillis());
         pageESRepository.index(entity);
     }

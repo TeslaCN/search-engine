@@ -16,14 +16,18 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * @author Weijie Wu
+ * @deprecated 爬虫简单实现，该实现仅为了第一版快速成型，以后不再使用
  */
-@Component
+//@Component
+@Deprecated
 public class CrawlerImpl implements Crawler {
 
     @Autowired
@@ -48,11 +52,11 @@ public class CrawlerImpl implements Crawler {
         Elements a = document.getElementsByTag("a");
         Set<String> hrefs = a.stream().map(element -> element.attr("href")).filter(s -> s.charAt(0) != '#').collect(Collectors.toSet());
 
-        String title = document.getElementsByTag("h1").text();
-        if (title == null || title.trim().isEmpty()) {
-            title = document.getElementsByTag("h2").text();
+        List<String> titles = document.getElementsByTag("h1").eachText();
+        if (titles == null || titles.isEmpty()) {
+            titles = document.getElementsByTag("h2").eachText();
         }
 
-        return CrawledPage.newPage(uri).code(code).title(title).html(html).content(document.text()).hrefs(hrefs).when(new Date()).build();
+        return CrawledPage.newPage(uri).code(code).title(titles).html(html).content(Arrays.asList(document.text())).hrefs(hrefs).when(new Date()).build();
     }
 }

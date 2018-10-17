@@ -18,7 +18,7 @@ public class PageMongoEntity implements Serializable {
     private String uri;
 
     @Indexed
-    private String title;
+    private List<String> title;
 
     private String html;
 
@@ -29,11 +29,11 @@ public class PageMongoEntity implements Serializable {
 
     private Integer code;
 
-    public String getTitle() {
+    public List<String> getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(List<String> title) {
         this.title = title;
     }
 
