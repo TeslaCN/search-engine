@@ -4,6 +4,8 @@ import ltd.scau.search.commons.PageOption;
 import ltd.scau.search.commons.entity.PageStructure;
 import ltd.scau.search.commons.service.PageStructureRepository;
 import ltd.scau.search.crawler.entity.CrawledPage;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -36,6 +38,8 @@ import java.util.stream.Collectors;
 @Component
 public class CrawlerXpathImpl implements Crawler {
 
+    private static final Log logger = LogFactory.getLog(CrawlerXpathImpl.class);
+
     @Autowired
     private HttpClient httpClient;
 
@@ -50,11 +54,13 @@ public class CrawlerXpathImpl implements Crawler {
 
         PageStructure pageStructure = pageStructureRepository.findLongestMatchByHostAndPathRegexPathPattern(uri);
 
-        if (pageStructure == null) {
+        if (pageStructure == null && (pageStructure = pageStructureRepository.findRegexMatchHostAndPathPattern(uri)) == null) {
+            logger.debug("Page Structure Not Found: " + uri);
             return null;
         }
 
         if (pageStructure.getOptions() == PageOption.IGNORE_CONTENT) {
+            logger.debug("Ignore: " + uri);
             return CrawledPage.newPage(uri).when(new Date()).build();
         }
 

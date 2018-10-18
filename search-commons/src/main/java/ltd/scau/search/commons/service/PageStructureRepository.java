@@ -25,4 +25,18 @@ public interface PageStructureRepository extends JpaRepository<PageStructure, Lo
     default PageStructure findLongestMatchByHostAndPathRegexPathPattern(URI uri) {
         return findLongestMatchByHostAndPathRegexPathPattern(uri.getHost(), uri.getPath());
     }
+
+    @Query(value = "select * from t_page_structure where ?1 regexp host and ?2 regexp path_pattern order by length(host), length(path_pattern) desc limit 1", nativeQuery = true)
+    List<PageStructure> findAllRegexMatchHostAndPathPattern(String host, String path);
+
+    default List<PageStructure> findAllRegexMatchHostAndPathPattern(URI uri) {
+        return findAllRegexMatchHostAndPathPattern(uri.getHost(), uri.getPath());
+    }
+
+    @Query(value = "select * from t_page_structure where ?1 regexp host and ?2 regexp path_pattern order by length(host), length(path_pattern) desc limit 1", nativeQuery = true)
+    PageStructure findRegexMatchHostAndPathPattern(String host, String path);
+
+    default PageStructure findRegexMatchHostAndPathPattern(URI uri) {
+        return findRegexMatchHostAndPathPattern(uri.getHost(), uri.getPath());
+    }
 }
