@@ -11,6 +11,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.ContentType;
 import org.apache.http.util.EntityUtils;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -18,16 +19,13 @@ import org.dom4j.Node;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Entities;
-import org.omg.PortableServer.POA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +46,16 @@ public class CrawlerXpathImpl implements Crawler {
 
     @Autowired
     private PageStructureRepository pageStructureRepository;
+
+    private static final String[] ACCEPT = {
+            ContentType.TEXT_HTML.getMimeType(),
+            ContentType.TEXT_PLAIN.getMimeType(),
+            ContentType.TEXT_XML.getMimeType(),
+            ContentType.DEFAULT_TEXT.getMimeType(),
+            ContentType.APPLICATION_XHTML_XML.getMimeType(),
+    };
+
+    private static final Set<String> acceptMimeType = new HashSet<>(Arrays.asList(ACCEPT));
 
     @Override
     public CrawledPage crawl(URI uri) throws IOException, DocumentException {
@@ -71,7 +79,19 @@ public class CrawlerXpathImpl implements Crawler {
         int code = statusLine.getStatusCode();
 
         HttpEntity entity = response.getEntity();
-        String html = EntityUtils.toString(entity, defaultCharset);
+        ContentType contentType = ContentType.get(entity);
+        String mimeType = contentType.getMimeType();
+        Charset contentTypeCharset = contentType.getCharset();
+
+        if (acceptMimeType.stream().noneMatch(mimeType::equalsIgnoreCase)) {
+            return CrawledPage.newPage(uri).code(code).when(new Date()).build();
+        }
+
+        String html = EntityUtils.toString(entity);
+
+        if (!defaultCharset.equals(contentTypeCharset)) {
+            html = new String(html.getBytes(contentTypeCharset), defaultCharset);
+        }
 
         Document document = Jsoup.parse(html, uri.toString());
         document.outputSettings().syntax(Document.OutputSettings.Syntax.xml).escapeMode(Entities.EscapeMode.xhtml);

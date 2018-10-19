@@ -57,9 +57,6 @@ public class MissionConsumerImpl implements MissionConsumer {
         defaultMQPushConsumer.setConsumeThreadMax(threadMax);
         defaultMQPushConsumer.registerMessageListener((MessageListenerConcurrently) (msgs, context) -> {
 
-            int ackIndex = context.getAckIndex();
-            logger.debug("ACK >> " + ackIndex);
-
             AtomicBoolean error = new AtomicBoolean(false);
             msgs.forEach(m -> {
                 Mission mission = null;
