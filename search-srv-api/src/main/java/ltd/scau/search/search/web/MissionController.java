@@ -39,7 +39,15 @@ public class MissionController {
     @PostMapping("/mission")
     public ResponseData postMission(String uris) {
         try {
-            missionProducer.submit(Mission.create(Arrays.stream(uris.split("\\|")).map(URI::create).toArray(URI[]::new)));
+            missionProducer.submit(
+                    Mission.create(
+                            Arrays.stream(uris.split("\\|"))
+                                    .map(URI::create)
+                                    .map(uri ->
+                                            uri.getPath() == null || uri.getPath().trim().isEmpty() ? uri.resolve("/") : uri
+                                    )
+                                    .toArray(URI[]::new))
+            );
             logger.info(uris);
             return ResponseData.aData().build();
         } catch (Exception e) {

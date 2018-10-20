@@ -10,4 +10,8 @@
 5. 第3步中的HTML解析出所有 a 标签的 href 属性，创建 Mission 入列
 
 
+记踩过的各种坑：
+1. 页面编码可能在Header的Content-Type中没有，要去meta标签看看
+2. URI的Path问题，resolve的时候，如果访问根且Path没有/，会直接把后面的path拼接起来，即
+http://wcce.scau.edu.cn会变成http://wcce.scau.edu.cncncontent.asp
 
