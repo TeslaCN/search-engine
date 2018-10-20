@@ -4,6 +4,7 @@ import ltd.scau.search.commons.PageOption;
 import ltd.scau.search.commons.entity.PageStructure;
 import ltd.scau.search.commons.service.PageStructureRepository;
 import ltd.scau.search.crawler.entity.CrawledPage;
+import ltd.scau.search.crawler.util.HtmlHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -81,16 +83,23 @@ public class CrawlerXpathImpl implements Crawler {
         HttpEntity entity = response.getEntity();
         ContentType contentType = ContentType.get(entity);
         String mimeType = contentType.getMimeType();
-        Charset contentTypeCharset = contentType.getCharset();
 
         if (acceptMimeType.stream().noneMatch(mimeType::equalsIgnoreCase)) {
             return CrawledPage.newPage(uri).code(code).when(new Date()).build();
         }
 
-        String html = EntityUtils.toString(entity);
+        String html = null;
+        byte[] bytes = EntityUtils.toByteArray(entity);
+        html = new String(bytes, defaultCharset);
+
+        Charset contentTypeCharset = null;
+        if ((contentTypeCharset = contentType.getCharset()) == null && (contentTypeCharset = HtmlHelper.getCharsetInMeta(html)) == null) {
+            logger.debug("Unknown Charset of >> " + uri);
+            throw new UnsupportedCharsetException(uri.toString());
+        }
 
         if (!defaultCharset.equals(contentTypeCharset)) {
-            html = new String(html.getBytes(contentTypeCharset), defaultCharset);
+            html = new String(bytes, contentTypeCharset);
         }
 
         Document document = Jsoup.parse(html, uri.toString());
@@ -99,6 +108,7 @@ public class CrawlerXpathImpl implements Crawler {
         String xhtml = document.html();
 
         org.dom4j.Document xmlDocument = DocumentHelper.parseText(xhtml);
+
         List<Node> titleNodes = xmlDocument.selectNodes(pageStructure.getTitleXpath());
         List<Node> contentNodes = xmlDocument.selectNodes(pageStructure.getContentXpath());
         List<Node> hrefNodes = xmlDocument.selectNodes(pageStructure.getHrefXpath());
@@ -112,4 +122,5 @@ public class CrawlerXpathImpl implements Crawler {
 
         return CrawledPage.newPage(uri).code(code).title(titles).tags(tags).html(html).content(contents).hrefs(hrefs).when(new Date()).build();
     }
+
 }
