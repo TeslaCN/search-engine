@@ -3,7 +3,6 @@ package ltd.scau.search.crawler.entity;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Weijie Wu
@@ -20,7 +19,7 @@ public class CrawledPage implements Serializable {
 
     private final List<String> content;
 
-    private final Set<URI> hrefs;
+    private final Set<String> hrefs;
 
     private final Set<String> tags;
 
@@ -52,7 +51,7 @@ public class CrawledPage implements Serializable {
         private List<String> title;
         private String html;
         private List<String> content;
-        private Set<URI> hrefs = new HashSet<>();
+        private Set<String> hrefs = new HashSet<>();
         private Set<String> tags = new HashSet<>();
         private int code;
         private Date time;
@@ -86,12 +85,12 @@ public class CrawledPage implements Serializable {
         }
 
         public PageBuilder hrefs(Set<String> hrefs) {
-            this.hrefs.addAll(hrefs.stream().map(uri::resolve).collect(Collectors.toSet()));
+            this.hrefs.addAll(hrefs);
             return this;
         }
 
         public PageBuilder hrefs(String... hrefs) {
-            this.hrefs.addAll(Arrays.stream(hrefs).map(uri::resolve).collect(Collectors.toSet()));
+            this.hrefs.addAll(Arrays.asList(hrefs));
             return this;
         }
 
@@ -142,7 +141,7 @@ public class CrawledPage implements Serializable {
         return html;
     }
 
-    public Set<URI> getHrefs() {
+    public Set<String> getHrefs() {
         return hrefs;
     }
 

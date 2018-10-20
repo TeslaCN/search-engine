@@ -5,6 +5,7 @@ import ltd.scau.search.commons.entity.ResponseData;
 import ltd.scau.search.commons.entity.mq.Message;
 import ltd.scau.search.commons.mq.producer.MissionProducer;
 import ltd.scau.search.commons.service.mq.MessageService;
+import ltd.scau.search.commons.util.URIs;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.rocketmq.common.protocol.body.ConsumeMessageDirectlyResult;
@@ -43,9 +44,7 @@ public class MissionController {
                     Mission.create(
                             Arrays.stream(uris.split("\\|"))
                                     .map(URI::create)
-                                    .map(uri ->
-                                            uri.getPath() == null || uri.getPath().trim().isEmpty() ? uri.resolve("/") : uri
-                                    )
+                                    .map(URIs::fix)
                                     .toArray(URI[]::new))
             );
             logger.info(uris);

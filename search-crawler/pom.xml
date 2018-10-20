@@ -56,19 +56,9 @@
             <version>4.5.6</version>
         </dependency>
         <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.11.3</version>
-        </dependency>
-        <dependency>
             <groupId>ltd.scau.search</groupId>
             <artifactId>search-commons</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>2.1.1</version>
         </dependency>
         <dependency>
             <groupId>jaxen</groupId>

@@ -4,6 +4,7 @@ import ltd.scau.search.commons.entity.es.PageEsEntity;
 import ltd.scau.search.commons.entity.mongodb.PageMongoEntity;
 import ltd.scau.search.commons.service.es.PageESRepository;
 import ltd.scau.search.commons.service.mongodb.PageMongoRepository;
+import ltd.scau.search.commons.util.URIs;
 import ltd.scau.search.crawler.component.crawler.Crawler;
 import ltd.scau.search.crawler.entity.CrawledPage;
 import ltd.scau.search.crawler.entity.ExecuteResult;
@@ -90,6 +91,7 @@ public class MissionExecutor {
             redisDao.setAdd(crawledRedisSetName, uriMd5);
             try {
                 Mission[] missions = page.getHrefs().stream()
+                        .map(h -> URIs.resolve(mission.getUri(), h))
                         .filter(uri -> uri.getHost() != null
                                 && uri.getHost().equals(mission.getUri().getHost())
                                 && !redisDao.setContains(crawledRedisSetName, DigestUtils.md5Hex(uri.toString()))

@@ -4,7 +4,7 @@ import ltd.scau.search.commons.PageOption;
 import ltd.scau.search.commons.entity.PageStructure;
 import ltd.scau.search.commons.service.PageStructureRepository;
 import ltd.scau.search.crawler.entity.CrawledPage;
-import ltd.scau.search.crawler.util.HtmlHelper;
+import ltd.scau.search.crawler.util.Htmls;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
@@ -93,7 +93,7 @@ public class CrawlerXpathImpl implements Crawler {
         html = new String(bytes, defaultCharset);
 
         Charset contentTypeCharset = null;
-        if ((contentTypeCharset = contentType.getCharset()) == null && (contentTypeCharset = HtmlHelper.getCharsetInMeta(html)) == null) {
+        if ((contentTypeCharset = contentType.getCharset()) == null && (contentTypeCharset = Htmls.getCharsetInMeta(html)) == null) {
             logger.debug("Unknown Charset of >> " + uri);
             throw new UnsupportedCharsetException(uri.toString());
         }
@@ -101,6 +101,7 @@ public class CrawlerXpathImpl implements Crawler {
         if (!defaultCharset.equals(contentTypeCharset)) {
             html = new String(bytes, contentTypeCharset);
         }
+        logger.debug(uri + " -> " + contentTypeCharset);
 
         Document document = Jsoup.parse(html, uri.toString());
         document.outputSettings().syntax(Document.OutputSettings.Syntax.xml).escapeMode(Entities.EscapeMode.xhtml);

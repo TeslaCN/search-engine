@@ -9,9 +9,9 @@ import java.util.Optional;
 /**
  * @author Weijie Wu
  */
-public class HtmlHelper {
+public class Htmls {
 
-    public static Charset getCharsetInMeta(String html) {
+    public static Charset getCharsetInMeta(final String html) {
         Charset contentTypeCharset;
         Optional<String> optional = Jsoup.parse(html).getElementsByTag("meta")
                 .stream()
@@ -25,4 +25,5 @@ public class HtmlHelper {
         contentTypeCharset = type.getCharset();
         return contentTypeCharset;
     }
+
 }

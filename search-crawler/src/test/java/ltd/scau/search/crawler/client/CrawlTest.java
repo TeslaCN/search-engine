@@ -1,10 +1,9 @@
 package ltd.scau.search.crawler.client;
 
-import ltd.scau.search.crawler.util.HtmlHelper;
+import ltd.scau.search.commons.util.URIs;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.BasicCookieStore;
@@ -12,18 +11,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.util.EntityUtils;
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Entity;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Entities;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Weijie Wu
@@ -64,7 +56,7 @@ public class CrawlTest {
 
             String html = new String(bytes, defaultCharset);
 
-            Charset charset = HtmlHelper.getCharsetInMeta(html);
+            Charset charset = URIs.getCharsetInMeta(html);
 
             System.err.println(charset);
 
