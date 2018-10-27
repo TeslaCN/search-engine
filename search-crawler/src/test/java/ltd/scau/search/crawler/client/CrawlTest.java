@@ -17,6 +17,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import static ltd.scau.search.crawler.util.Htmls.getCharsetInMeta;
+
 /**
  * @author Weijie Wu
  */
@@ -56,7 +58,7 @@ public class CrawlTest {
 
             String html = new String(bytes, defaultCharset);
 
-            Charset charset = URIs.getCharsetInMeta(html);
+            Charset charset = getCharsetInMeta(html);
 
             System.err.println(charset);
 
